@@ -2,7 +2,6 @@ class GameScene extends Phaser.Scene {
   constructor() {
     super("Game");
     this.fishPosition = true;
-    this.points = 0;
     this.boatBounds;
     this.playerRect;
     this.distance;
@@ -30,24 +29,10 @@ class GameScene extends Phaser.Scene {
 
     this.debug = this.add.graphics({ lineStyle: { color: 0xffff00 } });
 
-    this.fish = new Fish(this, 572, 387, "fish", 0);
+    this.fish = new Fish(this, 572, 387, "fish", 0, this.player);
    
     this.foreground = this.add.image(0, 0, "foreground");
     this.foreground.setOrigin(0, 0);
-
-    this.physics.add.overlap(this.player, this.fish, (player, fish) => {
-      if (!!this.fishPosition) {
-        this.fish.x = 117;
-        this.fish.y = 140;
-      } else {
-        this.fish.x = 572;
-        this.fish.y = 379;
-      }
-
-      this.fishPosition = !this.fishPosition;
-      this.fishGrab.play();
-      this.points += 1;
-    });
 
     var data = [
       80,
