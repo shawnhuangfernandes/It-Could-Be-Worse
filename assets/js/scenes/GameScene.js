@@ -30,6 +30,21 @@ class GameScene extends Phaser.Scene {
     this.debug = this.add.graphics({ lineStyle: { color: 0xffff00 } });
 
     this.fish = new Fish(this, 572, 387, "fish", 0, this.player);
+
+    this.fishPosition = false;
+
+    this.physics.add.overlap(this.player, this.fish, (player, fish) => {
+      if (!!this.fishPosition) {
+        this.fish.x = 117;
+        this.fish.y = 140;
+      } else {
+        this.fish.x = 572;
+        this.fish.y = 379;
+      }
+
+      this.fishPosition = !this.fishPosition;
+      this.fishGrab.play();
+    });
    
     this.foreground = this.add.image(0, 0, "foreground");
     this.foreground.setOrigin(0, 0);
@@ -56,6 +71,8 @@ class GameScene extends Phaser.Scene {
       80,
       109
     ];
+
+    
 
     this.boatBounds = new Phaser.Geom.Polygon(data);
     this.playerRect = new Phaser.Geom.Rectangle();
