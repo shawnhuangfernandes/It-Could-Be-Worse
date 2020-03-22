@@ -7,6 +7,10 @@ class GameScene extends Phaser.Scene {
     this.distance;
   }
 
+  init() {
+    this.scene.launch('Ui');
+  }
+
   create() {
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -33,18 +37,7 @@ class GameScene extends Phaser.Scene {
 
     this.fishPosition = false;
 
-    this.physics.add.overlap(this.player, this.fish, (player, fish) => {
-      if (!!this.fishPosition) {
-        this.fish.x = 117;
-        this.fish.y = 140;
-      } else {
-        this.fish.x = 572;
-        this.fish.y = 379;
-      }
-
-      this.fishPosition = !this.fishPosition;
-      this.fishGrab.play();
-    });
+    this.physics.add.overlap(this.player, this.fish, this.collectFish, null, this);
    
     this.foreground = this.add.image(0, 0, "foreground");
     this.foreground.setOrigin(0, 0);
@@ -130,5 +123,19 @@ class GameScene extends Phaser.Scene {
 
     blocked.none =
       !blocked.left && !blocked.right && !blocked.up && !blocked.down;
+  }
+
+  collectFish(player, fish) {
+    if (!!this.fishPosition) {
+      this.fish.x = 117;
+      this.fish.y = 140;
+    } else {
+      this.fish.x = 572;
+      this.fish.y = 379;
+    }
+
+    this.fishPosition = !this.fishPosition;
+    this.events.emit('updateScore');
+    this.fishGrab.play();
   }
 }
